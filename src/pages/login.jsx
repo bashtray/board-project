@@ -2,7 +2,7 @@
 import { Formik, useFormik } from "formik"
 import styled from "styled-components"
 import logoLanding from '../assets/logo-landing.png'
-
+import Form from "../components/form";
 // Defining styled components
 
 const Title = styled('h1')`
@@ -16,18 +16,6 @@ const Subtitle = styled('h2')`
   line-height: 140%;
   letter-spacing: 0.2px;
   font-size: 15px;
-`;
-
-const Input = styled('input')`
-	font-size: 1em;
-	padding: 0.5rem;
-	border-style: hidden;
-	border-radius: 0.5rem;
-`;
-
-const Label = styled('label')`
-	font-size: 1em;
-	font-weight: 500;
 `;
 
 const Wrapped = styled('div')`
@@ -54,15 +42,6 @@ const Row = styled('div')`
 	column-gap: 0.5em;
 `;
 
-const RowItemRight = styled(Row)`
-	justify-content: right;
-`;
-
-const Button = styled('button')`
-	padding: 1em;
-	font-weight: 500;
-`;
-
 const Logo = styled('img')`
 	width: 100%;
 	height: 340px;
@@ -85,22 +64,6 @@ const ContainerLogo = styled(Container)`
 const ContainerText = styled(Container)`
 	row-gap: 1em;
 	padding: 0 1em;
-`;
-
-const Form = styled('form')`
-  margin: 1rem 0.5rem;
-	padding: 0 1em;
-`;
-
-const InputField = styled('div')`
-	/* text-align: start; */
-`;
-
-const ErrorMessage = styled('div')`
-	font-weight: 300;
-	color: #fff;
-	font-size: 0.8em;
-	text-align: start;
 `;
 
 function capitalize(string) {
@@ -159,19 +122,16 @@ const validate = values => {
 function Login(params) {
 	// call formik
 	// define initial values
-	//  onsubmit method
+	// onsubmit method
+	const formInitialValues = {
+		email: '',
+		password: ''
+	}
 
-	const formik = useFormik({
-		initialValues: {
-			email: '',
-			password: ''
-		},
-		validate,
-		// call validate fn
-		onSubmit: ((values) => {
-			console.log('values: ', values)
-		})
-	})
+	const fields = [
+		{type: 'email' , id: 'email', name: 'email'},
+		{type: 'password' , id: 'password', name: 'password'}
+	]
 
 	return (
 		// use html tag ( form, label input )
@@ -182,11 +142,9 @@ function Login(params) {
 			{/* formm component */}
 
 			<Container>
-
 				<ContainerLogo>
 					<Logo src={logoLanding} />
 				</ContainerLogo>
-
 				<ContainerForm>
 					<ContainerText>
 						<Title>Task Management &
@@ -195,38 +153,9 @@ function Login(params) {
 							you better manage your task
 							project-wise conveniently!</Subtitle>
 					</ContainerText>
-					<Form onSubmit={formik.handleSubmit}>
-						<Container>
-							<Row>
-								<Label>Email</Label>
-								{/* input field */}
-								<InputField>
-									<Input type="email" id="email" name="email" onChange={formik.handleChange} value={formik.values.email} />
-									{/* error message label */}
-									{
-										formik.errors.email ? <ErrorMessage>{formik.errors.email}</ErrorMessage> : null
-									}
-								</InputField>
-							</Row>
-
-							<Row>
-								<Label>Password</Label>
-								<InputField>
-									<Input type="password" id="password" name="password" onChange={formik.handleChange} value={formik.values.password} />
-									{
-										formik.errors.password ? <ErrorMessage>{formik.errors.password}</ErrorMessage> : null
-									}
-								</InputField>
-							</Row>
-							<RowItemRight>
-								<Button type="submit">Log in!</Button>
-							</RowItemRight>
-
-						</Container>
-					</Form>
+					<Form formFields={fields} formValue={formInitialValues} validate={validate}></Form>
 				</ContainerForm>
 			</Container>
-
 		</Wrapped>
 	)
 }
@@ -235,9 +164,10 @@ export default Login
 
 // To-Do
 // [/] Add form validations using formik
-// Separate components from main view
-// import components
+// [/] Separate form component from main view
+// Add view signup, resetPassword
 
 // Nice to do
 // Work on responsivness (tablet/desktop)
 // change theme to ligth
+
